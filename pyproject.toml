@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kovamesh-verify"
+version = "0.1.0"
+description = "Runtime verification for PRs, deploys, and CI — run HTTP and command health checks from a YAML spec."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "William", email = "ngoctam.699@gmail.com" }]
+requires-python = ">=3.10"
+dependencies = ["PyYAML>=6.0"]
+keywords = ["qa", "verification", "smoke-tests", "ci", "http", "runtime"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Testing",
+]
+
+[project.urls]
+Homepage = "https://bntam.github.io/kovamesh/"
+Repository = "https://github.com/bntam/kovamesh-verify"
+Issues = "https://github.com/bntam/kovamesh-verify/issues"
+
+[project.scripts]
+kovamesh-verify = "kovamesh_verify.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

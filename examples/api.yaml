@@ -1,0 +1,38 @@
+# KovaMesh Verify — example spec: API behaviour checks.
+#
+# Runs against the same bundled demo server as examples/kovamesh.yaml
+# (stdlib only, no internet needed):
+#
+#   python3 examples/demo_server.py 8765
+#   kovamesh-verify run --spec examples/api.yaml
+name: kovamesh demo api
+description: API behaviour checks — POST echo and a latency budget.
+base_url: http://127.0.0.1:8765
+timeout: 5
+checks:
+  - name: echo endpoint reflects posted json
+    type: http
+    url: /api/echo
+    method: POST
+    headers:
+      Content-Type: application/json
+    body: '{"ping": "pong"}'
+    expected_status: [200]
+    json_contains:
+      ping: pong
+
+  - name: slow endpoint stays inside its latency budget
+    type: http
+    url: /slow
+    method: GET
+    expected_status: [200]
+    max_latency_ms: 2000
+    json_contains:
+      slow: true
+
+  - name: health endpoint is fast
+    type: http
+    url: /health
+    method: GET
+    expected_status: [200]
+    max_latency_ms: 500

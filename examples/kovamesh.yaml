@@ -1,0 +1,51 @@
+# KovaMesh Verify — example spec: demo service smoke checks.
+#
+# These checks run against the bundled demo server (stdlib only, no
+# internet needed). Start it first, in a separate terminal:
+#
+#   python3 examples/demo_server.py 8765
+#
+# Then run:
+#
+#   kovamesh-verify check --spec examples/kovamesh.yaml
+#   kovamesh-verify run   --spec examples/kovamesh.yaml
+name: kovamesh demo service
+description: Smoke checks for the bundled demo service (local only).
+base_url: http://127.0.0.1:8765
+timeout: 5
+checks:
+  - name: health endpoint returns ok
+    type: http
+    url: /health
+    method: GET
+    expected_status: [200]
+    max_latency_ms: 1000
+    json_contains:
+      status: ok
+      version: 0.1.0
+
+  - name: users api returns two users
+    type: http
+    url: /api/users
+    method: GET
+    expected_status: [200]
+    json_contains:
+      count: 2
+
+  - name: homepage mentions KovaMesh
+    type: http
+    url: /
+    method: GET
+    expected_status: [200]
+    body_contains: KovaMesh
+
+  - name: missing page is a 404
+    type: http
+    url: /does-not-exist
+    method: GET
+    expected_status: [404]
+
+  - name: python is available
+    type: command
+    command: python3 --version
+    expected_exit_code: 0
